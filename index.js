@@ -65,7 +65,9 @@ function removeClient(ws) {
 
 // Iniciar servidor
 server.listen(PORT, () => {
-  console.log(`🚀 Servidor WebSocket en http://localhost:${PORT}`)
+  console.log(
+    `🚀 Servidor WebSocket en http://onlineserver-production.up.railway.app`,
+  )
 })
 
 /* En el código anterior, hemos creado un servidor WebSocket utilizando la biblioteca  ws  y un servidor HTTP utilizando Express. También hemos definido un middleware CORS para permitir solicitudes de cualquier origen. 
