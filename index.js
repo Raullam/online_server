@@ -72,3 +72,11 @@ server.listen(PORT, () => {
     `🚀 Servidor WebSocket en http://onlineserver-production.up.railway.app`,
   )
 })
+
+/*En el código anterior, hemos creado un servidor WebSocket utilizando la biblioteca  ws  y un servidor HTTP utilizando Express. El servidor WebSocket se encargará de manejar la comunicación en tiempo real entre los jugadores. 
+  Cuando un cliente se conecta, se guarda en un objeto  clients  con su nombre de jugador como clave y el objeto WebSocket como valor. Cada vez que un jugador envié un mensaje, se enviará al oponente utilizando la función  sendToOpponent(ws, data) . 
+  Por último, cuando un cliente se desconecta, se eliminará del objeto  clients  utilizando la función  removeClient(ws) . 
+  Paso 4: Crear el cliente 
+  Ahora, crearemos un cliente en React para que los jugadores puedan conectarse al servidor y jugar. 
+  Primero, cree un nuevo proyecto de React utilizando Create React App. 
+  npx create-react-app client*/
