@@ -5,14 +5,12 @@ const cors = require('cors')
 const app = express()
 const PORT = process.env.PORT || 3333
 
-// Middleware CORS
 app.use(cors())
 
-// Servidor WebSocket
 const server = require('http').createServer(app)
 const wss = new WebSocket.Server({ server })
 
-let clients = {} // Para almacenar los jugadores conectados
+let clients = {} // Almacenar jugadores conectados
 
 // Evento cuando un cliente se conecta
 wss.on('connection', (ws) => {
@@ -22,6 +20,12 @@ wss.on('connection', (ws) => {
     try {
       const data = JSON.parse(message)
       console.log(`📩 Mensaje recibido:`, data)
+
+      if (data.player) {
+        // Guardar el jugador en la lista de clientes
+        clients[data.player] = ws
+        console.log(`✅ ${data.player} se ha conectado.`)
+      }
 
       if (data.action === 'LUCHAR' || data.action === 'PLANTA') {
         // Reenviar el ataque al oponente
@@ -33,14 +37,13 @@ wss.on('connection', (ws) => {
   })
 
   ws.on('close', () => {
-    console.log('🔴 Cliente desconectado')
     removeClient(ws)
   })
 })
 
 // Función para enviar mensaje al oponente
 function sendToOpponent(ws, data) {
-  for (const client of wss.clients) {
+  for (const [player, client] of Object.entries(clients)) {
     if (client !== ws && client.readyState === WebSocket.OPEN) {
       client.send(
         JSON.stringify({
@@ -55,10 +58,10 @@ function sendToOpponent(ws, data) {
 
 // Eliminar cliente desconectado
 function removeClient(ws) {
-  for (const [key, client] of Object.entries(clients)) {
+  for (const [player, client] of Object.entries(clients)) {
     if (client === ws) {
-      delete clients[key]
-      console.log(`👋 Jugador ${key} eliminado`)
+      delete clients[player]
+      console.log(`👋 Jugador ${player} se ha desconectado.`)
     }
   }
 }
@@ -69,7 +72,3 @@ server.listen(PORT, () => {
     `🚀 Servidor WebSocket en http://onlineserver-production.up.railway.app`,
   )
 })
-
-/* En el código anterior, hemos creado un servidor WebSocket utilizando la biblioteca  ws  y un servidor HTTP utilizando Express. También hemos definido un middleware CORS para permitir solicitudes de cualquier origen. 
-    En el evento  connection , cuando un cliente se conecta, registramos el cliente en un objeto  clients  para mantener un seguimiento de los jugadores conectados. 
-    En el evento  message , recibimos el mensaje del cliente y lo reenviamos al oponente. */
