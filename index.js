@@ -50,6 +50,7 @@ function sendToOpponent(ws, data) {
           action: data.action,
           option: data.option,
           player: data.player,
+          damage: data.damage,
         }),
       )
     }
