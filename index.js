@@ -63,6 +63,18 @@ function removeClient(ws) {
     if (client === ws) {
       delete clients[player]
       console.log(`👋 Jugador ${player} se ha desconectado.`)
+
+      // Notificar al oponente que este jugador se desconectó
+      for (const [otherPlayer, otherClient] of Object.entries(clients)) {
+        if (otherClient !== ws && otherClient.readyState === WebSocket.OPEN) {
+          otherClient.send(
+            JSON.stringify({
+              tipus: 'desconnexio',
+              usuariId: player, // Puede ser string
+            }),
+          )
+        }
+      }
     }
   }
 }
