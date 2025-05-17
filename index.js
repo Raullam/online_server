@@ -44,7 +44,7 @@ wss.on('connection', (ws) => {
 // Función para enviar mensaje al oponente
 function sendToOpponent(ws, data) {
   for (const [player, client] of Object.entries(clients)) {
-    if (client !== ws && client.readyState === WebSocket.OPEN) {
+    if (client.readyState === WebSocket.OPEN) {
       client.send(
         JSON.stringify({
           action: data.action,
